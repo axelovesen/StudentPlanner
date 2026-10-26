@@ -5,7 +5,8 @@ import {
     Pressable
 } from 'react-native';
 
-import { globalStyles } from '../styles/GlobalStyle';
+import { globalStyles, priorityColors } from '../styles/GlobalStyle';
+import { formatDate, daysUntil } from '../utils/dateUtils';
 
 export default function TaskComponent({
     id,
@@ -17,8 +18,29 @@ export default function TaskComponent({
     deleteTask
 }) {
 
+    // Hvor mange dager det er igjen til fristen
+    const daysLeft = daysUntil(dueDate);
+
+    let daysText = `${daysLeft} days left`;
+
+    if (daysLeft === 0) {
+        daysText = 'Due today';
+    } else if (daysLeft === 1) {
+        daysText = '1 day left';
+    } else if (daysLeft < 0) {
+        daysText = 'Overdue';
+    }
+
+    // Hver prioritet har sin egen farge
+    const colors = priorityColors[priority] || priorityColors.Medium;
+
     return (
-        <View style={globalStyles.taskCard}>
+        <View
+            style={[
+                globalStyles.taskCard,
+                { borderLeftWidth: 5, borderLeftColor: colors.text }
+            ]}
+        >
 
             <View style={globalStyles.taskTopRow}>
 
@@ -26,8 +48,18 @@ export default function TaskComponent({
                     {title}
                 </Text>
 
-                <View style={globalStyles.priorityBadge}>
-                    <Text style={globalStyles.priorityText}>
+                <View
+                    style={[
+                        globalStyles.priorityBadge,
+                        { backgroundColor: colors.background }
+                    ]}
+                >
+                    <Text
+                        style={[
+                            globalStyles.priorityText,
+                            { color: colors.text }
+                        ]}
+                    >
                         {priority}
                     </Text>
                 </View>
@@ -35,7 +67,18 @@ export default function TaskComponent({
             </View>
 
             <Text style={globalStyles.dueDate}>
-                Due {dueDate}
+                Due {formatDate(dueDate)}
+                {!completed && (
+                    <Text
+                        style={
+                            daysLeft < 0
+                                ? globalStyles.overdueText
+                                : globalStyles.daysLeftText
+                        }
+                    >
+                        {'  ·  '}{daysText}
+                    </Text>
+                )}
             </Text>
 
             {completed ? (

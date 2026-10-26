@@ -45,8 +45,13 @@ const filteredTasks = tasks
 
         return true;
     })
+    // Sorterer etter prioritet først, og deretter etter hvilken frist som kommer først
     .sort((a, b) => {
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
+        if (a.priority !== b.priority) {
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        }
+
+        return a.dueDate.localeCompare(b.dueDate);
     });
 
     const Header = () => (

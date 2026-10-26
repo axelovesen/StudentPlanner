@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,8 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import TaskListScreen from './screens/TaskListScreen';
 import AddTaskScreen from './screens/AddTaskScreen';
+import CalendarScreen from './screens/CalendarScreen';
+import StudyPlanScreen from './screens/StudyPlanScreen';
 
 const Tab = createBottomTabNavigator();
+
+// Nøkkelen oppgavene lagres under i AsyncStorage
+const STORAGE_KEY = 'studentplanner_tasks';
 
 export default function App() {
 
@@ -16,25 +22,61 @@ export default function App() {
         {
             id: '1',
             title: 'Finish programming assignment',
-            dueDate: '21 September',
+            dueDate: '2026-10-21',
             priority: 'High',
             completed: false
         },
         {
             id: '2',
             title: 'Study physiology',
-            dueDate: '23 September',
+            dueDate: '2026-10-23',
             priority: 'Medium',
             completed: false
         },
         {
             id: '3',
             title: 'Prepare genetics seminar',
-            dueDate: '25 September',
+            dueDate: '2026-10-25',
             priority: 'Low',
             completed: false
         }
     ]);
+
+    // Blir true når lagrede oppgaver er hentet, så vi ikke overskriver dem med eksempeldataene
+    const [loaded, setLoaded] = useState(false);
+
+    // Henter lagrede oppgaver når appen starter
+    useEffect(() => {
+
+        const loadTasks = async () => {
+
+            try {
+                const savedTasks = await AsyncStorage.getItem(STORAGE_KEY);
+
+                if (savedTasks !== null) {
+                    setTasks(JSON.parse(savedTasks));
+                }
+            } catch (error) {
+                console.log('Could not load tasks', error);
+            }
+
+            setLoaded(true);
+        };
+
+        loadTasks();
+    }, []);
+
+    // Lagrer oppgavene hver gang listen endres
+    useEffect(() => {
+
+        if (!loaded) {
+            return;
+        }
+
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)).catch((error) => {
+            console.log('Could not save tasks', error);
+        });
+    }, [tasks, loaded]);
 
     const addTask = (title, dueDate, priority) => {
 
@@ -118,6 +160,14 @@ export default function App() {
                             iconName = 'checkmark-circle-outline';
                         }
 
+                        if (route.name === 'Calendar') {
+                            iconName = 'calendar-outline';
+                        }
+
+                        if (route.name === 'Plan') {
+                            iconName = 'sparkles-outline';
+                        }
+
                         if (route.name === 'Add') {
                             iconName = 'add-circle-outline';
                         }
@@ -159,6 +209,36 @@ export default function App() {
                             tasks={tasks}
                             completeTask={completeTask}
                             deleteTask={deleteTask}
+                        />
+                    )}
+                </Tab.Screen>
+
+                <Tab.Screen
+                    name="Calendar"
+                    options={{
+                        title: 'Calendar'
+                    }}
+                >
+                    {(props) => (
+                        <CalendarScreen
+                            {...props}
+                            tasks={tasks}
+                            completeTask={completeTask}
+                            deleteTask={deleteTask}
+                        />
+                    )}
+                </Tab.Screen>
+
+                <Tab.Screen
+                    name="Plan"
+                    options={{
+                        title: 'Study Plan'
+                    }}
+                >
+                    {(props) => (
+                        <StudyPlanScreen
+                            {...props}
+                            tasks={tasks}
                         />
                     )}
                 </Tab.Screen>

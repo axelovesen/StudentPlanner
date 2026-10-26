@@ -1,5 +1,12 @@
 import { StyleSheet } from 'react-native';
 
+// Farger for hver prioritet (brukes på oppgavekortene)
+export const priorityColors = {
+    High: { text: '#d64545', background: '#fdecec' },
+    Medium: { text: '#e08a1e', background: '#fdf3e6' },
+    Low: { text: '#20a464', background: '#e8f7ef' }
+};
+
 export const globalStyles = StyleSheet.create({
 
     container: {
@@ -281,6 +288,145 @@ deleteButtonText: {
     color: '#9b3b3b',
     fontSize: 13,
     fontWeight: '600'
+},
+
+daysLeftText: {
+    color: '#3867d6',
+    fontWeight: '600'
+},
+
+overdueText: {
+    color: '#d64545',
+    fontWeight: 'bold'
+},
+
+calendarCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 15,
+    marginTop: 15,
+    borderWidth: 1,
+    borderColor: '#e5e7eb'
+},
+
+calendarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10
+},
+
+calendarArrow: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#eef2ff',
+    alignItems: 'center',
+    justifyContent: 'center'
+},
+
+calendarArrowText: {
+    fontSize: 22,
+    color: '#3867d6',
+    fontWeight: 'bold'
+},
+
+calendarMonth: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#17233c'
+},
+
+calendarGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+},
+
+calendarWeekDay: {
+    width: '14.28%',
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#8a94a6',
+    marginBottom: 6
+},
+
+calendarCell: {
+    width: '14.28%',
+    alignItems: 'center',
+    paddingVertical: 4
+},
+
+calendarDay: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center'
+},
+
+calendarToday: {
+    borderWidth: 1,
+    borderColor: '#3867d6'
+},
+
+calendarSelected: {
+    backgroundColor: '#3867d6'
+},
+
+calendarDayText: {
+    color: '#17233c',
+    fontSize: 14
+},
+
+calendarDayTextSelected: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: 'bold'
+},
+
+calendarDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginTop: 3
+},
+
+todayButton: {
+    marginTop: 10,
+    padding: 10,
+    alignItems: 'center'
+},
+
+todayButtonText: {
+    color: '#3867d6',
+    fontWeight: '600'
+},
+
+planCard: {
+    backgroundColor: '#17233c',
+    padding: 20,
+    borderRadius: 16,
+    marginTop: 15
+},
+
+planText: {
+    color: '#ffffff',
+    fontSize: 15,
+    lineHeight: 24
+},
+
+hintText: {
+    color: '#8a94a6',
+    fontSize: 13,
+    textAlign: 'center'
+},
+
+errorText: {
+    color: '#d64545',
+    fontSize: 14,
+    marginTop: 15,
+    textAlign: 'center'
 },
 
 emptyText: {
